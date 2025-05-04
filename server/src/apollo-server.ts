@@ -7,7 +7,7 @@ import * as express from 'express';
 import { Server } from 'http';
 import { GRAPHQL_SCHEMA_PATH } from './constants';
 import Db from './db';
-import resolvers from './resolvers';
+import resolvers, { TwitterResolverContext } from './resolvers';
 
 const SCHEMA = loadSchemaSync(GRAPHQL_SCHEMA_PATH, {
   loaders: [new GraphQLFileLoader()],
@@ -24,7 +24,7 @@ export async function createApolloServer(
       resolvers,
     }),
 
-    context: () => ({ db }), //ensure db is passed to context
+    context: (): TwitterResolverContext => ({ db }), //ensure db is passed to context, but we can also add other context values here by adding them to the interface
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start();
