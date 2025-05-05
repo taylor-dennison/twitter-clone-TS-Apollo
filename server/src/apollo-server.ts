@@ -24,7 +24,12 @@ export async function createApolloServer(
       resolvers,
     }),
 
-    context: (): TwitterResolverContext => ({ db }), //ensure db is passed to context, but we can also add other context values here by adding them to the interface
+    context: (): TwitterResolverContext => ({
+      db,
+      dbTweetCache: {},
+      dbUserCache: {},
+      dbTweetToFavoriteCountMap: {},
+    }), //ensure db is passed to context, but we can also add other context values here by adding them to the interface
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start();
